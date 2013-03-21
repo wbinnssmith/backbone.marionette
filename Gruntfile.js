@@ -55,8 +55,9 @@ module.exports = function(grunt) {
   // build the multiple versions of the jQuery and Backbone
   // configuration for jasmine to use
 
-  var multiVersionSpecs = (function(config){
+  var multiVersionSpecs = (function(config, vendor){
     var i, j, backbone, jQuery;
+    var updatedVendor;
 
     var root = config.root;
     var jasmine = {};
@@ -68,26 +69,21 @@ module.exports = function(grunt) {
       for(var j = 0; j < config.backbone.length; j++){
         jQuery = config.jQuery[j];
 
+        updatedVendor = _.clone(vendor);
+        updatedVendor[0] = config.root + jQuery;
+        updatedVendor[3] = config.root + backbone;
+
         // build the config
         jasmine[backbone + "-" + jQuery] = {
           src : jasmineSrc,
-          options: {
-            vendor: [
-                      'public/javascripts/' + jQuery,
-                      'public/javascripts/json2.js',
-                      'public/javascripts/underscore.js',
-                      'public/javascripts/' + backbone,
-                      'public/javascripts/backbone.babysitter.js',
-                      'public/javascripts/backbone.wreqr.js',
-                    ]
-          }
+          options: { vendor: updatedVendor }
         }
 
       }
     }
 
     return jasmine;
-  })(multiVersionSpecConfig);
+  })(multiVersionSpecConfig, jasmineVendor);
 
   // Project configuration.
   var gruntConfig = {
