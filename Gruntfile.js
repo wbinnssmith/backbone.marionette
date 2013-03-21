@@ -1,8 +1,96 @@
 /*global module:false*/
 module.exports = function(grunt) {
+  var _ = require("underscore");
+
+  var jasmineVendor = [
+    'public/javascripts/jquery-1.9.0.js',
+    'public/javascripts/json2.js',
+    'public/javascripts/underscore.js',
+    'public/javascripts/backbone-1.0.0.js',
+    'public/javascripts/backbone.babysitter.js',
+    'public/javascripts/backbone.wreqr.js',
+  ];
+
+  // Define the files that jasmine should use to test
+  var jasmineSrc = [
+    'src/build/marionette.core.js',
+    'spec/javascripts/support/marionette.support.js',
+    'src/marionette.helpers.js',
+    'src/marionette.createObject.js',
+    'src/marionette.triggermethod.js',
+    'src/marionette.bindEntityEvents.js',
+    'src/marionette.controller.js',
+    'src/marionette.domRefresh.js',
+    'src/marionette.view.js',
+    'src/marionette.itemview.js',
+    'src/marionette.collectionview.js',
+    'src/marionette.compositeview.js',
+    'src/marionette.region.js',
+    'src/marionette.regionManager.js',
+    'src/marionette.layout.js',
+    'src/marionette.application.js',
+    'src/marionette.approuter.js',
+    'src/marionette.module.js',
+    'src/marionette.templatecache.js',
+    'src/marionette.renderer.js',
+    'src/marionette.callbacks.js'
+  ];
+
+  // Define the combinations of Backbone and jQuery
+  // to use for jasmine specs
+  var multiVersionSpecConfig = {
+    root: "public/javascripts/",
+    backbone: [
+      "backbone-0.9.9.js", 
+      "backbone-0.9.10.js", 
+      "backbone-1.0.0.js"
+    ],
+    jQuery: [
+      "jquery-1.7.2.js", 
+      "jquery-1.8.3.js", 
+      "jquery-1.9.0.js", 
+    ]
+  };
+
+  // build the multiple versions of the jQuery and Backbone
+  // configuration for jasmine to use
+
+  var multiVersionSpecs = (function(config){
+    var i, j, backbone, jQuery;
+
+    var root = config.root;
+    var jasmine = {};
+
+    // loop over backbone versions
+    for(var i = 0; i < config.backbone.length; i++){
+      backbone = config.backbone[i];
+      // loop over jQuery versions
+      for(var j = 0; j < config.backbone.length; j++){
+        jQuery = config.jQuery[j];
+
+        // build the config
+        jasmine[backbone + "-" + jQuery] = {
+          src : jasmineSrc,
+          options: {
+            vendor: [
+                      'public/javascripts/' + jQuery,
+                      'public/javascripts/json2.js',
+                      'public/javascripts/underscore.js',
+                      'public/javascripts/' + backbone,
+                      'public/javascripts/backbone.babysitter.js',
+                      'public/javascripts/backbone.wreqr.js',
+                    ]
+          }
+        }
+
+      }
+    }
+
+    return jasmine;
+  })(multiVersionSpecConfig);
 
   // Project configuration.
-  grunt.initConfig({
+  var gruntConfig = {
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       version: '<%= pkg.version %>',
@@ -91,14 +179,7 @@ module.exports = function(grunt) {
       options : {
         helpers : 'spec/javascripts/helpers/*.js',
         specs : 'spec/javascripts/**/*.spec.js',
-        vendor : [
-          'public/javascripts/jquery.js',
-          'public/javascripts/json2.js',
-          'public/javascripts/underscore.js',
-          'public/javascripts/backbone.js',
-          'public/javascripts/backbone.babysitter.js',
-          'public/javascripts/backbone.wreqr.js',
-        ],
+        vendor : jasmineVendor,
       },
       coverage : {
         src : '<%= jasmine.marionette.src %>',
@@ -111,29 +192,7 @@ module.exports = function(grunt) {
         }
       },
       marionette : {
-        src : [
-          'src/build/marionette.core.js',
-          'spec/javascripts/support/marionette.support.js',
-          'src/marionette.helpers.js',
-          'src/marionette.createObject.js',
-          'src/marionette.triggermethod.js',
-          'src/marionette.bindEntityEvents.js',
-          'src/marionette.controller.js',
-          'src/marionette.domRefresh.js',
-          'src/marionette.view.js',
-          'src/marionette.itemview.js',
-          'src/marionette.collectionview.js',
-          'src/marionette.compositeview.js',
-          'src/marionette.region.js',
-          'src/marionette.regionManager.js',
-          'src/marionette.layout.js',
-          'src/marionette.application.js',
-          'src/marionette.approuter.js',
-          'src/marionette.module.js',
-          'src/marionette.templatecache.js',
-          'src/marionette.renderer.js',
-          'src/marionette.callbacks.js'
-        ],
+        src : jasmineSrc,
       }
     },
 
@@ -170,7 +229,14 @@ module.exports = function(grunt) {
         }
       }
     }
-  });
+  };
+
+  // Add the multiple backbone-jQuery specs to the
+  // grunt configuration
+  _.extend(gruntConfig.jasmine, multiVersionSpecs);
+
+  // configure grunt and add tasks
+  grunt.initConfig(gruntConfig);
 
   grunt.loadNpmTasks('grunt-preprocess');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
@@ -188,6 +254,6 @@ module.exports = function(grunt) {
   grunt.registerTask('server', ['jasmine:marionette:build', 'connect:server', 'watch:server']);
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'jasmine:coverage', 'preprocess', 'concat', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'jasmine', 'preprocess', 'concat', 'uglify']);
 
 };
