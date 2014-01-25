@@ -144,7 +144,9 @@ module.exports = function(grunt) {
           'src/marionette.module.js',
           'src/marionette.templatecache.js',
           'src/marionette.renderer.js',
-          'src/marionette.callbacks.js'
+          'src/marionette.callbacks.js',
+          'src/marionette.behaviors.js',
+          'src/marionette.behavior.js',
         ],
       }
     },
