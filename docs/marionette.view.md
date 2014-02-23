@@ -13,6 +13,7 @@ behaviors that are shared across all views.
 
 * [Binding To View Events](#binding-to-view-events)
 * [View close](#view-close)
+* [View onShow](#view-onshow)
 * [View onBeforeClose](#view-onbeforeclose)
 * [View "dom:refresh" / onDomRefresh event](#view-domrefresh--ondomrefresh-event)
 * [View.triggers](#viewtriggers)
@@ -55,6 +56,36 @@ optionally set the context by using `_.bind`.
 // itself, for this event handler only (does not affect any other use of the
 // "reconcileCollection" method)
 this.listenTo(this.collection, "add", _.bind(this.reconcileCollection, this.collection));
+```
+
+## View onShow
+
+* "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
+
+This event can be used to react to when a view has been shown via a [region](marionette.region.md).
+All `views` that inherit from the base `Marionette.View` class have this functionality. `itemView`, 'collectionView', 'compositeView', 'layout'
+
+```js
+Backbone.Marionette.ItemView.extend({
+  onShow: function(){
+    // react to when a view has been shown
+  }
+});
+```
+
+A common use case for the `onShow` method is to use it to add children views.
+
+```js
+var LayoutView = Backbone.Marionette.Layout.extend({
+   regions: {
+     Header: 'header',
+     Section: 'section'
+   },
+   onShow: function() {
+      this.Header.show(new Header());
+      this.Section.show(new Section());
+   }
+});
 ```
 
 ## View close
