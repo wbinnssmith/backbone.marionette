@@ -19,6 +19,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [CollectionView's `getItemView`](#collectionviews-getitemview)
 * [CollectionView's `itemViewOptions`](#collectionviews-itemviewoptions)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
+* [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
 * [CollectionView's `buildItemView`](#collectionviews-builditemview)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
@@ -151,7 +152,9 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-Or, if you need the `emptyView`'s type chosen dynamically, specify `getEmptyView`:
+## CollectionView's `getEmptyView`
+
+If you need the `emptyView`'s type chosen dynamically, specify `getEmptyView`:
 
 ```js
 Backbone.Marionette.CollectionView.extend({
