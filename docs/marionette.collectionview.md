@@ -21,6 +21,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
 * [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
 * [CollectionView's `buildItemView`](#collectionviews-builditemview)
+* [CollectionView's `addItemView`](#collectionviews-additemview)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
@@ -197,6 +198,20 @@ buildItemView: function(item, ItemViewType, itemViewOptions){
   // return it
   return view;
 },
+```
+
+## CollectionView's `addItemView`
+
+The `addItemView` method is responsible for rendering the `itemViews` and adding them to the HTML for the `collectionView` instance. In most cases you should not override this method. However if you do want to short circut this method, it can be accomplished via the following.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  addItemView: function(item, ItemView, index){
+    if (item.shouldBeShown()) {
+      Backbone.Marionette.CollectionView.prototype.addItemView.apply(this, arguments);
+    }
+  }
+});
 ```
 
 ## Callback Methods
