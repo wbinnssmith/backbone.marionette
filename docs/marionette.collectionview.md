@@ -16,6 +16,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 ## Documentation Index
 
 * [CollectionView's `itemView`](#collectionviews-itemview)
+* [CollectionView's `getItemView`](#collectionviews-getitemview)
 * [CollectionView's `itemViewOptions`](#collectionviews-itemviewoptions)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
 * [CollectionView's `buildItemView`](#collectionviews-builditemview)
@@ -75,6 +76,8 @@ new MyCollectionView({
 
 If you do not specify an `itemView`, an exception will be thrown
 stating that you must specify an `itemView`.
+
+## CollectionView's `getItemView`
 
 If you need a view specific to your model, you can override
 `getItemView`:
