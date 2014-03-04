@@ -40,8 +40,8 @@
   },
   "github": "https://github.com/marionettejs/backbone.marionette",
   "dependencies": {
-    "backbone.babysitter": "~0.0.6",
-    "backbone.wreqr": "~0.2.0",
+    "backbone.babysitter": "https://github.com/marionettejs/backbone.babysitter/archive/8a75d29f9882efafe2b76a0bdfda8340f6f5a7c3.tar.gz",
+    "backbone.wreqr": "https://github.com/marionettejs/backbone.wreqr/archive/63e5fc27754c775149be561f7fa1cb1e186b5a83.tar.gz",
     "backbone": "~1.1.0"
   },
   "devDependencies": {
